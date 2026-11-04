@@ -11,7 +11,6 @@ struct CoursesView: View {
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	
 	@AppStorage("rememberCoursesChanges") private var rememberCoursesChanges: Bool = true
-	@AppStorage("resetAllCalculators") private var resetAllCalculators: Bool = true
 	@AppStorage("gradingPeriodsData") private var gradingPeriodsData: Data = Data()
 	
 	@State private var calculatorSelection: Calculator = .fullYear
