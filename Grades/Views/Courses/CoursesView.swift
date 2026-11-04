@@ -84,11 +84,14 @@ struct CoursesView: View {
 				
 				Section {
 					ForEach($gradingPeriods.filter { $0.wrappedValue.calculators.contains(calculatorSelection) }, id: \.wrappedValue.id) { $gradingPeriod in
-						Picker(gradingPeriod.name, selection: $gradingPeriod.grade) {
+						Picker(selection: $gradingPeriod.grade) {
 							ForEach(Grade.allCases, id: \.self) { grade in
 								Text(grade.description)
 									.tag(grade)
 							}
+						} label: {
+							Text(gradingPeriod.name)
+								.contentTransition(.numericText())
 						}
 						// Prevents tapping anywhere in the row from triggering the menu
 						.pickerStyle(.menu)
