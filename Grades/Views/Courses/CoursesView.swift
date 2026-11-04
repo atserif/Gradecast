@@ -58,7 +58,7 @@ struct CoursesView: View {
 		NavigationStack {
 			Form {
 				Section {
-					Picker("Grading Format", selection: $calculatorSelection) {
+					Picker("Grading Format", selection: $calculatorSelection.animation()) {
 						ForEach(CalculatorSelection.allCases, id: \.self) { calculator in
 							Text(calculator.description)
 								.tag(calculator)
