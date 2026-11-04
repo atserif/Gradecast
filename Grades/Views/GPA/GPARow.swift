@@ -62,7 +62,6 @@ struct GPARow: View {
 						.labelsVisibility(.visible)
 					}
 				}
-				.animation(.default, value: course)
 				.labelStyle(.picker)
 				.buttonStyle(.borderless)
 				.padding(.horizontal)
