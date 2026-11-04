@@ -7,63 +7,26 @@
 
 import SwiftUI
 
-private enum CalculatorSelection: CaseIterable {
-	case fullYear
-	case semester
-	case stateAssessed
-	
-	var description: String {
-		switch self {
-		case .fullYear: "Full Year"
-		case .semester: "Semester"
-		case .stateAssessed: "State-Assessed"
-		}
-	}
-}
-
 struct CoursesView: View {
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	
 	@AppStorage("rememberCoursesChanges") private var rememberCoursesChanges: Bool = true
 	@AppStorage("resetAllCalculators") private var resetAllCalculators: Bool = true
-	@AppStorage("fullYearGradingPeriodsData") private var fullYearGradingPeriodsData: Data = Data()
-	@AppStorage("semesterGradingPeriodsData") private var semesterGradingPeriodsData: Data = Data()
-	@AppStorage("stateAssessedGradingPeriodsData") private var stateAssessedGradingPeriodsData: Data = Data()
+	@AppStorage("gradingPeriodsData") private var gradingPeriodsData: Data = Data()
 	
-	@State private var calculatorSelection: CalculatorSelection = .fullYear
-	@State private var fullYearGradingPeriods: [GradingPeriod] = [
-		GradingPeriod(name: "Quarter 1", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 2", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 3", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 4", type: .quarter, grade: .A),
-		GradingPeriod(name: "Final", type: .exam, grade: .A)
-	]
-	@State private var semesterGradingPeriods: [GradingPeriod] = [
-		GradingPeriod(name: "Quarter 1", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 2", type: .quarter, grade: .A),
-		GradingPeriod(name: "Final", type: .exam, grade: .A),
-	]
-	@State private var stateAssessedGradingPeriods: [GradingPeriod] = [
-		GradingPeriod(name: "Quarter 1", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 2", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 3", type: .quarter, grade: .A),
-		GradingPeriod(name: "Quarter 4", type: .quarter, grade: .A),
-		GradingPeriod(name: "State Assessment", type: .exam, grade: .A)
+	@State private var calculatorSelection: Calculator = .fullYear
+	@State private var gradingPeriods: [GradingPeriod] = [
+		GradingPeriod(id: 1, name: "Quarter 1", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .A),
+		GradingPeriod(id: 2, name: "Quarter 2", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .A),
+		GradingPeriod(id: 3, name: "Quarter 3", calculators: [.fullYear, .stateAssessed], type: .quarter, grade: .A),
+		GradingPeriod(id: 4, name: "Quarter 4", calculators: [.fullYear, .stateAssessed], type: .quarter, grade: .A),
+		GradingPeriod(id: 5, name: "Final", calculators: [.fullYear, .semester], type: .exam, grade: .A),
+		GradingPeriod(id: 5, name: "State Assessment", calculators: [.stateAssessed], type: .exam, grade: .A)
 	]
 	
 	@State private var selectionFeedback: Int = 0
 	@State private var infoSheetPresented: Bool = false
 	
-	private var selectedGradingPeriods: Binding<[GradingPeriod]> {
-		switch calculatorSelection {
-		case .fullYear:
-			$fullYearGradingPeriods
-		case .semester:
-			$semesterGradingPeriods
-		case .stateAssessed:
-			$stateAssessedGradingPeriods
-		}
-	}
 	private var courseGrade: Grade {
 		var letterGrade: Grade
 		
@@ -73,56 +36,30 @@ struct CoursesView: View {
 		
 		switch calculatorSelection {
 		case .fullYear:
-			quarterTotal = fullYearGradingPeriods.filter { $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 22.5
-			examTotal = fullYearGradingPeriods.filter { $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
+			quarterTotal = gradingPeriods.filter { $0.calculators.contains(.fullYear) && $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 22.5
+			examTotal = gradingPeriods.filter { $0.calculators.contains(.fullYear) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
 			average = (quarterTotal + examTotal) / 100
-			
-			switch average {
-			case 3.5...:
-				letterGrade = .A
-			case 2.5..<3.5:
-				letterGrade = .B
-			case 1.5..<2.5:
-				letterGrade = .C
-			case 0.75..<1.5:
-				letterGrade = .D
-			default:
-				letterGrade = .E
-			}
 		case .semester:
-			quarterTotal = semesterGradingPeriods.filter { $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 45
-			examTotal = semesterGradingPeriods.filter { $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
+			quarterTotal = gradingPeriods.filter { $0.calculators.contains(.semester) && $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 45
+			examTotal = gradingPeriods.filter { $0.calculators.contains(.semester) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
 			average = (quarterTotal + examTotal) / 100
-			
-			switch average {
-			case 3.5...:
-				letterGrade = .A
-			case 2.5..<3.5:
-				letterGrade = .B
-			case 1.5..<2.5:
-				letterGrade = .C
-			case 0.75..<1.5:
-				letterGrade = .D
-			default:
-				letterGrade = .E
-			}
 		case .stateAssessed:
-			quarterTotal = stateAssessedGradingPeriods.filter { $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 20
-			examTotal = stateAssessedGradingPeriods.filter { $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 20
+			quarterTotal = gradingPeriods.filter { $0.calculators.contains(.stateAssessed) && $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 20
+			examTotal = gradingPeriods.filter { $0.calculators.contains(.stateAssessed) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 20
 			average = (quarterTotal + examTotal) / 100
-			
-			switch average {
-			case 3.5...:
-				letterGrade = .A
-			case 2.5..<3.5:
-				letterGrade = .B
-			case 1.5..<2.5:
-				letterGrade = .C
-			case 0.75..<1.5:
-				letterGrade = .D
-			default:
-				letterGrade = .E
-			}
+		}
+		
+		switch average {
+		case 3.5...:
+			letterGrade = .A
+		case 2.5..<3.5:
+			letterGrade = .B
+		case 1.5..<2.5:
+			letterGrade = .C
+		case 0.75..<1.5:
+			letterGrade = .D
+		default:
+			letterGrade = .E
 		}
 		
 		return letterGrade
@@ -133,7 +70,7 @@ struct CoursesView: View {
 			Form {
 				Section {
 					Picker("Calculator", selection: $calculatorSelection.animation()) {
-						ForEach(CalculatorSelection.allCases, id: \.self) { calculator in
+						ForEach(Calculator.allCases, id: \.self) { calculator in
 							Text(calculator.description)
 								.tag(calculator)
 						}
@@ -146,7 +83,7 @@ struct CoursesView: View {
 				.listRowBackground(Color.clear)
 				
 				Section {
-					ForEach(selectedGradingPeriods, id: \.name) { $gradingPeriod in
+					ForEach($gradingPeriods.filter { $0.wrappedValue.calculators.contains(calculatorSelection) }, id: \.wrappedValue.id) { $gradingPeriod in
 						Picker(gradingPeriod.name, selection: $gradingPeriod.grade) {
 							ForEach(Grade.allCases, id: \.self) { grade in
 								Text(grade.description)
@@ -203,22 +140,8 @@ struct CoursesView: View {
 						Divider()
 						
 						Button("Reset", systemImage: "arrow.clockwise") {
-							if resetAllCalculators {
-								calculatorSelection = .fullYear
-								
-								fullYearGradingPeriods.indices.forEach { fullYearGradingPeriods[$0].grade = .A }
-								semesterGradingPeriods.indices.forEach { semesterGradingPeriods[$0].grade = .A }
-								stateAssessedGradingPeriods.indices.forEach { stateAssessedGradingPeriods[$0].grade = .A }
-							} else {
-								switch calculatorSelection {
-								case .fullYear:
-									fullYearGradingPeriods.indices.forEach { fullYearGradingPeriods[$0].grade = .A }
-								case .semester:
-									semesterGradingPeriods.indices.forEach { semesterGradingPeriods[$0].grade = .A }
-								case .stateAssessed:
-									stateAssessedGradingPeriods.indices.forEach { stateAssessedGradingPeriods[$0].grade = .A }
-								}
-							}
+							calculatorSelection = .fullYear
+							gradingPeriods.indices.forEach { gradingPeriods[$0].grade = .A }
 						}
 					}
 				}
@@ -238,31 +161,19 @@ struct CoursesView: View {
 				loadGradingPeriods()
 			}
 		}
-		.onChange(of: [fullYearGradingPeriods, semesterGradingPeriods, stateAssessedGradingPeriods]) {
+		.onChange(of: gradingPeriods) {
 			saveGradingPeriods()
 		}
 	}
 	
 	private func saveGradingPeriods() {
-		if let encoded = try? JSONEncoder().encode(fullYearGradingPeriods) {
-			fullYearGradingPeriodsData = encoded
-		}
-		if let encoded = try? JSONEncoder().encode(semesterGradingPeriods) {
-			semesterGradingPeriodsData = encoded
-		}
-		if let encoded = try? JSONEncoder().encode(stateAssessedGradingPeriods) {
-			stateAssessedGradingPeriodsData = encoded
+		if let encoded = try? JSONEncoder().encode(gradingPeriods) {
+			gradingPeriodsData = encoded
 		}
 	}
 	private func loadGradingPeriods() {
-		if let decoded = try? JSONDecoder().decode([GradingPeriod].self, from: fullYearGradingPeriodsData) {
-			fullYearGradingPeriods = decoded
-		}
-		if let decoded = try? JSONDecoder().decode([GradingPeriod].self, from: semesterGradingPeriodsData) {
-			semesterGradingPeriods = decoded
-		}
-		if let decoded = try? JSONDecoder().decode([GradingPeriod].self, from: stateAssessedGradingPeriodsData) {
-			stateAssessedGradingPeriods = decoded
+		if let decoded = try? JSONDecoder().decode([GradingPeriod].self, from: gradingPeriodsData) {
+			gradingPeriods = decoded
 		}
 	}
 }
