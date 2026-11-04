@@ -54,11 +54,85 @@ struct CoursesView: View {
 	@State private var selectionFeedback: Int = 0
 	@State private var infoSheetPresented: Bool = false
 	
+	private var selectedGradingPeriods: Binding<[GradingPeriod]> {
+		switch calculatorSelection {
+		case .fullYear:
+			$fullYearGradingPeriods
+		case .semester:
+			$semesterGradingPeriods
+		case .stateAssessed:
+			$stateAssessedGradingPeriods
+		}
+	}
+	private var courseGrade: Grade {
+		var letterGrade: Grade
+		
+		let quarterTotal: Double
+		let examTotal: Double
+		let average: Double
+		
+		switch calculatorSelection {
+		case .fullYear:
+			quarterTotal = fullYearGradingPeriods.filter { $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 22.5
+			examTotal = fullYearGradingPeriods.filter { $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
+			average = (quarterTotal + examTotal) / 100
+			
+			switch average {
+			case 3.5...:
+				letterGrade = .A
+			case 2.5..<3.5:
+				letterGrade = .B
+			case 1.5..<2.5:
+				letterGrade = .C
+			case 0.75..<1.5:
+				letterGrade = .D
+			default:
+				letterGrade = .E
+			}
+		case .semester:
+			quarterTotal = semesterGradingPeriods.filter { $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 45
+			examTotal = semesterGradingPeriods.filter { $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
+			average = (quarterTotal + examTotal) / 100
+			
+			switch average {
+			case 3.5...:
+				letterGrade = .A
+			case 2.5..<3.5:
+				letterGrade = .B
+			case 1.5..<2.5:
+				letterGrade = .C
+			case 0.75..<1.5:
+				letterGrade = .D
+			default:
+				letterGrade = .E
+			}
+		case .stateAssessed:
+			quarterTotal = stateAssessedGradingPeriods.filter { $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 20
+			examTotal = stateAssessedGradingPeriods.filter { $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 20
+			average = (quarterTotal + examTotal) / 100
+			
+			switch average {
+			case 3.5...:
+				letterGrade = .A
+			case 2.5..<3.5:
+				letterGrade = .B
+			case 1.5..<2.5:
+				letterGrade = .C
+			case 0.75..<1.5:
+				letterGrade = .D
+			default:
+				letterGrade = .E
+			}
+		}
+		
+		return letterGrade
+	}
+	
 	var body: some View {
 		NavigationStack {
 			Form {
 				Section {
-					Picker("Grading Format", selection: $calculatorSelection.animation()) {
+					Picker("Calculator", selection: $calculatorSelection.animation()) {
 						ForEach(CalculatorSelection.allCases, id: \.self) { calculator in
 							Text(calculator.description)
 								.tag(calculator)
@@ -71,13 +145,45 @@ struct CoursesView: View {
 				.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
 				.listRowBackground(Color.clear)
 				
-				switch calculatorSelection {
-				case .fullYear:
-					FullYearView(gradingPeriods: $fullYearGradingPeriods)
-				case .semester:
-					SemesterView(gradingPeriods: $semesterGradingPeriods)
-				case .stateAssessed:
-					StateAssessedView(gradingPeriods: $stateAssessedGradingPeriods)
+				Section {
+					ForEach(selectedGradingPeriods, id: \.name) { $gradingPeriod in
+						Picker(gradingPeriod.name, selection: $gradingPeriod.grade) {
+							ForEach(Grade.allCases, id: \.self) { grade in
+								Text(grade.description)
+									.tag(grade)
+							}
+						}
+						// Prevents tapping anywhere in the row from triggering the menu
+						.pickerStyle(.menu)
+						.tint(.secondary)
+						.swipeActions {
+							Button("Reset", systemImage: "arrow.clockwise") {
+								gradingPeriod.grade = .A
+							}
+						}
+						.contextMenu {
+							Button("Reset", systemImage: "arrow.clockwise") {
+								gradingPeriod.grade = .A
+							}
+						}
+					}
+				} header: {
+					Text(calculatorSelection != .stateAssessed ? "Quarter & Exam Grades" : "Quarter & Assessment Grades")
+						.contentTransition(.numericText())
+				}
+				
+				Section {
+					LabeledContent("Course Grade") {
+						Text(courseGrade.description)
+							.monospacedDigit()
+							.contentTransition(.numericText())
+							.animation(.default, value: courseGrade)
+					}
+					.contextMenu {
+						Button("Copy Course Grade", systemImage: "document.on.document") {
+							UIPasteboard.general.string = courseGrade.description
+						}
+					}
 				}
 			}
 			.onChange(of: calculatorSelection) {
