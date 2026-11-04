@@ -12,7 +12,17 @@ struct PickerLabelStyle: LabelStyle {
 	@ScaledMetric(relativeTo: .largeTitle) private var dynamicPadding: CGFloat = 12
 	
 	func makeBody(configuration: Configuration) -> some View {
-		if showBorders {
+		if !showBorders {
+			HStack(spacing: 4) {
+				configuration.icon
+				
+				configuration.title
+				
+				Image(systemName: "chevron.up.chevron.down")
+					.imageScale(.small)
+			}
+			.tint(.secondary)
+		} else {
 			HStack(spacing: 4) {
 				configuration.icon
 				
@@ -28,16 +38,6 @@ struct PickerLabelStyle: LabelStyle {
 			.padding(.horizontal, dynamicPadding)
 			.background(Color(.tertiarySystemFill))
 			.clipShape(.capsule)
-		} else {
-			HStack(spacing: 4) {
-				configuration.icon
-				
-				configuration.title
-				
-				Image(systemName: "chevron.up.chevron.down")
-					.imageScale(.small)
-			}
-			.tint(.secondary)
 		}
 	}
 }
