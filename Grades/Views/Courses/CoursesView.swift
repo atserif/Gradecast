@@ -37,16 +37,15 @@ struct CoursesView: View {
 		case .fullYear:
 			quarterTotal = gradingPeriods.filter { $0.calculators.contains(.fullYear) && $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 22.5
 			examTotal = gradingPeriods.filter { $0.calculators.contains(.fullYear) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
-			average = (quarterTotal + examTotal) / 100
 		case .semester:
 			quarterTotal = gradingPeriods.filter { $0.calculators.contains(.semester) && $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 45
 			examTotal = gradingPeriods.filter { $0.calculators.contains(.semester) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 10
-			average = (quarterTotal + examTotal) / 100
 		case .stateAssessed:
 			quarterTotal = gradingPeriods.filter { $0.calculators.contains(.stateAssessed) && $0.type == .quarter }.map { $0.grade.rawValue }.reduce(0, +) * 20
 			examTotal = gradingPeriods.filter { $0.calculators.contains(.stateAssessed) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 20
-			average = (quarterTotal + examTotal) / 100
 		}
+		
+		average = (quarterTotal + examTotal) / 100
 		
 		switch average {
 		case 3.5...:
