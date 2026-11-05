@@ -142,7 +142,10 @@ struct CoursesView: View {
 						
 						Button("Reset", systemImage: "arrow.clockwise") {
 							calculatorSelection = .fullYear
-							gradingPeriods.indices.forEach { gradingPeriods[$0].grade = .A }
+							
+							withAnimation {
+								gradingPeriods.indices.forEach { gradingPeriods[$0].grade = .A }
+							}
 						}
 					}
 				}
