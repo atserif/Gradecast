@@ -172,14 +172,14 @@ struct CoursesView: View {
 		}
 	}
 	
-	private func saveGradingPeriods() {
-		if let encoded = try? JSONEncoder().encode(gradingPeriods) {
-			gradingPeriodsData = encoded
-		}
-	}
 	private func loadGradingPeriods() {
 		if let decoded = try? JSONDecoder().decode([GradingPeriod].self, from: gradingPeriodsData) {
 			gradingPeriods = decoded
+		}
+	}
+	private func saveGradingPeriods() {
+		if let encoded = try? JSONEncoder().encode(gradingPeriods) {
+			gradingPeriodsData = encoded
 		}
 	}
 }

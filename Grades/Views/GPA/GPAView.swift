@@ -276,14 +276,14 @@ struct GPAView: View {
 		}
 	}
 	
-	private func saveCourses() {
-		if let encoded = try? JSONEncoder().encode(courses) {
-			coursesData = encoded
-		}
-	}
 	private func loadCourses() {
 		if let decoded = try? JSONDecoder().decode([Course].self, from: coursesData) {
 			courses = decoded
+		}
+	}
+	private func saveCourses() {
+		if let encoded = try? JSONEncoder().encode(courses) {
+			coursesData = encoded
 		}
 	}
 }
