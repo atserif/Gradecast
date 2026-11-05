@@ -126,6 +126,13 @@ struct CoursesView: View {
 			.onChange(of: calculatorSelection) {
 				selectionFeedback += 1
 			}
+			// Sync Final and State Assessment grades
+			.onChange(of: gradingPeriods[4].grade) { oldValue, newValue in
+				gradingPeriods[5].grade = newValue
+			}
+			.onChange(of: gradingPeriods[5].grade) { oldValue, newValue in
+				gradingPeriods[4].grade = newValue
+			}
 			.toolbar {
 				ToolbarItem(placement: .title) {
 					StaticNavigationTitle(title: "Courses")
