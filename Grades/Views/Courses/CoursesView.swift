@@ -31,7 +31,6 @@ struct CoursesView: View {
 		
 		let quarterTotal: Double
 		let examTotal: Double
-		let average: Double
 		
 		switch calculatorSelection {
 		case .fullYear:
@@ -45,7 +44,7 @@ struct CoursesView: View {
 			examTotal = gradingPeriods.filter { $0.calculators.contains(.stateAssessed) && $0.type == .exam }.map { $0.grade.rawValue }.reduce(0, +) * 20
 		}
 		
-		average = (quarterTotal + examTotal) / 100
+		let average: Double = (quarterTotal + examTotal) / 100
 		
 		switch average {
 		case 3.5...:
