@@ -77,7 +77,7 @@ struct GPAView: View {
 				// Multiple selection context menu
 				.contextMenu(forSelectionType: Course.ID.self) { selectedCourses in
 					if selectedCourses.isEmpty { } else if selection.count > 1 {
-						Button("Reset", systemImage: "arrow.clockwise") {
+						Button("Reset", systemImage: "arrow.counterclockwise") {
 							for index in courses.indices {
 								if selectedCourses.contains(courses[index].id) {
 									resetCourse(at: index)
@@ -204,7 +204,7 @@ struct GPAView: View {
 					}
 					
 					ToolbarItem(placement: .bottomBar) {
-						Button("Reset", systemImage: "arrow.clockwise") {
+						Button("Reset", systemImage: "arrow.counterclockwise") {
 							for index in courses.indices where selection.contains(courses[index].id) {
 								resetCourse(at: index)
 							}

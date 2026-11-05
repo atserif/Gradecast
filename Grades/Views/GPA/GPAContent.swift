@@ -42,7 +42,7 @@ struct GPAContent: View {
 							}
 						}
 						
-						Button("Reset", systemImage: "arrow.clockwise") {
+						Button("Reset", systemImage: "arrow.counterclockwise") {
 							resetCourse(course)
 						}
 					}
@@ -62,7 +62,7 @@ struct GPAContent: View {
 							}
 						}
 						
-						Button("Reset", systemImage: "arrow.clockwise") {
+						Button("Reset", systemImage: "arrow.counterclockwise") {
 							if focused.wrappedValue == course.id {
 								focused.wrappedValue = nil
 							}

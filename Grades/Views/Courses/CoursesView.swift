@@ -94,12 +94,12 @@ struct CoursesView: View {
 						.pickerStyle(.menu)
 						.tint(.secondary)
 						.swipeActions {
-							Button("Reset", systemImage: "arrow.clockwise") {
+							Button("Reset", systemImage: "arrow.counterclockwise") {
 								gradingPeriod.grade = .A
 							}
 						}
 						.contextMenu {
-							Button("Reset", systemImage: "arrow.clockwise") {
+							Button("Reset", systemImage: "arrow.counterclockwise") {
 								gradingPeriod.grade = .A
 							}
 						}
