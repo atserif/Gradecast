@@ -140,13 +140,13 @@ struct CoursesView: View {
 				
 				ToolbarItem(placement: .primaryAction) {
 					Menu("More", systemImage: "ellipsis") {
-						Button("About Courses", systemImage: "info.circle") {
-							infoSheetPresented = true
-						}
+						Toggle("Remember Changes", systemImage: "brain", isOn: $rememberCoursesChanges)
 						
 						Divider()
 						
-						Toggle("Remember Changes", systemImage: "brain", isOn: $rememberCoursesChanges)
+						Button("About Courses", systemImage: "info.circle") {
+							infoSheetPresented = true
+						}
 					}
 				}
 			}

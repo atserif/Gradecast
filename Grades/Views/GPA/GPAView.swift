@@ -160,13 +160,13 @@ struct GPAView: View {
 							.disabled(courses.count >= 20)
 							
 							Menu("More", systemImage: "ellipsis") {
-								Button("About GPA", systemImage: "info.circle") {
-									infoSheetPresented = true
-								}
+								Toggle("Remember Changes", systemImage: "brain", isOn: $rememberGPAChanges)
 								
 								Divider()
 								
-								Toggle("Remember Changes", systemImage: "brain", isOn: $rememberGPAChanges)
+								Button("About GPA", systemImage: "info.circle") {
+									infoSheetPresented = true
+								}
 							}
 						}
 					} else {
