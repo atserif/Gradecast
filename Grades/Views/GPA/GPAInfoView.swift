@@ -35,7 +35,7 @@ struct GPAInfoView: View {
 				}
 				
 				Section {
-					Text("All GPA calculation information is derived from \(Text("[Howard County Public School System Policy 8020](https://policy.hcpss.org/8000/8020/)").underline(showBorders)).")
+					Text("All GPA calculation information is derived from \(Text("[Howard County Public School System Policy 8020](https://policy.hcpss.org/8000/8020/)")).")
 						.font(.subheadline)
 						.foregroundStyle(.secondary)
 				}

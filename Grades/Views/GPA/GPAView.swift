@@ -143,6 +143,7 @@ struct GPAView: View {
 								Text("Select")
 									// Fixes default styling when Show Borders is enabled
 									.padding(.horizontal, showBorders ? 12 : 0)
+									.underline(false)
 							}
 							.disabled(courses.isEmpty)
 						}
@@ -191,6 +192,7 @@ struct GPAView: View {
 									Text("Deselect All")
 										// Fixes default styling when Show Borders is enabled
 										.padding(.horizontal, showBorders ? 12 : 0)
+										.underline(false)
 								}
 							}
 						} else {
@@ -201,6 +203,7 @@ struct GPAView: View {
 									Text("Select All")
 										// Fixes default styling when Show Borders is enabled
 										.padding(.horizontal, showBorders ? 12 : 0)
+										.underline(false)
 								}
 							}
 						}

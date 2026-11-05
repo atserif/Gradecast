@@ -43,7 +43,7 @@ struct CoursesInfoView: View {
 				}
 				
 				Section {
-					Text("All grade calculation information is derived from \(Text("[Howard County Public School System Policy 8020](https://policy.hcpss.org/8000/8020/)").underline(showBorders)).")
+					Text("All grade calculation information is derived from \(Text("[Howard County Public School System Policy 8020](https://policy.hcpss.org/8000/8020/)")).")
 						.font(.subheadline)
 						.foregroundStyle(.secondary)
 				}
