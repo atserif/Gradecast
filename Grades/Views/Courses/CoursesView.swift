@@ -164,7 +164,9 @@ struct CoursesView: View {
 			}
 		}
 		.onChange(of: gradingPeriods) {
-			saveGradingPeriods()
+			if rememberCoursesChanges {
+				saveGradingPeriods()
+			}
 		}
 	}
 	
