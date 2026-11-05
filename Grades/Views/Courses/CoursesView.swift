@@ -146,13 +146,7 @@ struct CoursesView: View {
 						
 						Divider()
 						
-						Button("Reset", systemImage: "arrow.clockwise") {
-//							calculatorSelection = .fullYear
-							
-							withAnimation {
-								gradingPeriods.indices.forEach { gradingPeriods[$0].grade = .A }
-							}
-						}
+						Toggle("Remember Changes", systemImage: "brain", isOn: $rememberCoursesChanges)
 					}
 				}
 			}

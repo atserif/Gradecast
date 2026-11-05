@@ -166,21 +166,7 @@ struct GPAView: View {
 								
 								Divider()
 								
-								Button("Reset", systemImage: "arrow.clockwise") {
-									if focused != nil {
-										focused = nil
-										
-										Task {
-											withAnimation {
-												courses.removeAll()
-											}
-										}
-									} else {
-										withAnimation {
-											courses.removeAll()
-										}
-									}
-								}
+								Toggle("Remember Changes", systemImage: "brain", isOn: $rememberGPAChanges)
 							}
 						}
 					} else {

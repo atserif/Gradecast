@@ -16,38 +16,6 @@
 			<key>DefaultValue</key>
 			<string>Unknown</string>
 		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>Courses</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Remember Changes</string>
-			<key>Key</key>
-			<string>rememberCoursesChanges</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>GPA</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Remember Changes</string>
-			<key>Key</key>
-			<string>rememberGPAChanges</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
 	</array>
 </dict>
 </plist>
