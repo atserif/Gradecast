@@ -21,6 +21,7 @@ struct GPAView: View {
 	// Prevents changes in selection while deletion is occurring
 	@State private var temporarySelection: Set<UUID> = []
 	
+	@State private var feedbackTrigger: Int = 0
 	@State private var deleteConfirmationPresented: Bool = false
 	@State private var infoSheetPresented: Bool = false
 	
@@ -152,6 +153,8 @@ struct GPAView: View {
 						
 						ToolbarItemGroup(placement: .primaryAction) {
 							Button("New Course", systemImage: "plus") {
+								feedbackTrigger += 1
+								
 								withAnimation {
 									newCourse()
 									proxy.scrollTo("bottom", anchor: .top)
@@ -168,11 +171,16 @@ struct GPAView: View {
 									infoSheetPresented = true
 								}
 							}
+							.sensoryFeedback(.selection, trigger: rememberGPAChanges)
+							.sensoryFeedback(.selection, trigger: infoSheetPresented) { oldValue, newValue in
+								newValue == true
+							}
 						}
 					} else {
 						if selection.count == courses.count {
 							ToolbarItem(placement: .topBarTrailing) {
 								Button {
+									feedbackTrigger += 1
 									selection.removeAll()
 								} label: {
 									Text("Deselect All")
@@ -184,6 +192,7 @@ struct GPAView: View {
 						} else {
 							ToolbarItem(placement: .topBarTrailing) {
 								Button {
+									feedbackTrigger += 1
 									selection = Set(courses.map { $0.id })
 								} label: {
 									Text("Select All")
@@ -205,6 +214,8 @@ struct GPAView: View {
 					
 					ToolbarItem(placement: .bottomBar) {
 						Button("Reset", systemImage: "arrow.counterclockwise") {
+							feedbackTrigger += 1
+							
 							for index in courses.indices where selection.contains(courses[index].id) {
 								resetCourse(at: index)
 							}
@@ -234,6 +245,8 @@ struct GPAView: View {
 					
 					ToolbarItem(placement: .bottomBar) {
 						Button("Delete", systemImage: "trash", role: .destructive) {
+							feedbackTrigger += 1
+							
 							temporarySelection = selection
 							deleteConfirmationPresented = true
 						}
@@ -254,6 +267,8 @@ struct GPAView: View {
 				.sheet(isPresented: $infoSheetPresented) {
 					GPAInfoView()
 				}
+				.sensoryFeedback(.selection, trigger: feedbackTrigger)
+				.sensoryFeedback(.selection, trigger: editMode)
 				.toolbarVisibility(editMode == .inactive ? .visible : .hidden, for: .tabBar)
 				.toolbarVisibility(editMode == .inactive ? .hidden : .visible, for: .bottomBar)
 				.toolbarTitleDisplayMode(.inline)

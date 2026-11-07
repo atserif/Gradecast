@@ -10,6 +10,8 @@ import SwiftUI
 struct CoursesInfoView: View {
 	@Environment(\.dismiss) private var dismiss
 	@Environment(\.accessibilityShowBorders) private var showBorders
+	
+	@State private var feedbackTrigger: Int = 0
 
 	var body: some View {
 		NavigationStack {
@@ -54,8 +56,10 @@ struct CoursesInfoView: View {
 			.toolbar {
 				ToolbarItem(placement: .cancellationAction) {
 					Button("Close", systemImage: "xmark", role: .close) {
+						feedbackTrigger += 1
 						dismiss()
 					}
+					.sensoryFeedback(.selection, trigger: feedbackTrigger)
 				}
 			}
 			.navigationTitle("About Courses")

@@ -22,8 +22,7 @@ struct CoursesView: View {
 		GradingPeriod(id: 5, name: "Final", calculators: [.fullYear, .semester], type: .exam, grade: .A),
 		GradingPeriod(id: 5, name: "State Assessment", calculators: [.stateAssessed], type: .exam, grade: .A)
 	]
-	
-	@State private var selectionFeedback: Int = 0
+
 	@State private var infoSheetPresented: Bool = false
 	
 	private var courseGrade: Grade {
@@ -74,6 +73,7 @@ struct CoursesView: View {
 					}
 					.pickerStyle(.segmented)
 					.controlSize(horizontalSizeClass == .compact ? .extraLarge : .regular)
+					.sensoryFeedback(.selection, trigger: calculatorSelection)
 				}
 				// 1 pt bottom inset accounts for the segmented Picker's arbitrary vertical offset
 				.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
@@ -123,9 +123,6 @@ struct CoursesView: View {
 					}
 				}
 			}
-			.onChange(of: calculatorSelection) {
-				selectionFeedback += 1
-			}
 			// Sync Final and State Assessment grades
 			.onChange(of: gradingPeriods[4].grade) { oldValue, newValue in
 				gradingPeriods[5].grade = newValue
@@ -148,12 +145,15 @@ struct CoursesView: View {
 							infoSheetPresented = true
 						}
 					}
+					.sensoryFeedback(.selection, trigger: rememberCoursesChanges)
+					.sensoryFeedback(.selection, trigger: infoSheetPresented) { oldValue, newValue in
+						newValue == true
+					}
 				}
 			}
 			.sheet(isPresented: $infoSheetPresented) {
 				CoursesInfoView()
 			}
-			.sensoryFeedback(.selection, trigger: selectionFeedback)
 			// Accounts for the 2 2/3 pt gap between the segmented Picker's and List row's vertical bounds
 			.contentMargins(.top, 7 + (1 / 3))
 			.toolbarTitleDisplayMode(.inline)
