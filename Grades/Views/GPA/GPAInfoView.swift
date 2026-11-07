@@ -11,7 +11,7 @@ struct GPAInfoView: View {
 	@Environment(\.dismiss) private var dismiss
 	@Environment(\.accessibilityShowBorders) private var showBorders
 	
-	@State private var feedbackTrigger: Int = 0
+	@State private var selectionFeedbackTrigger: Int = 0
 	
 	var body: some View {
 		NavigationStack {
@@ -48,10 +48,10 @@ struct GPAInfoView: View {
 			.toolbar {
 				ToolbarItem(placement: .cancellationAction) {
 					Button("Close", systemImage: "xmark", role: .close) {
-						feedbackTrigger += 1
 						dismiss()
+						selectionFeedbackTrigger += 1
 					}
-					.sensoryFeedback(.selection, trigger: feedbackTrigger)
+					.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 				}
 			}
 			.navigationTitle("About GPA")

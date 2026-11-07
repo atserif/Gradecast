@@ -12,6 +12,9 @@ struct GPAContent: View {
 	@Binding var courses: [Course]
 	@Binding var editMode: EditMode
 	
+	@Binding var selectionFeedbackTrigger: Int
+	@Binding var successFeedbackTrigger: Int
+	
 	var focused: FocusState<UUID?>.Binding
 	
 	let unweightedGPA: Double
@@ -53,6 +56,8 @@ struct GPAContent: View {
 								withAnimation {
 									editMode = .inactive
 								}
+							} else {
+								selectionFeedbackTrigger += 1
 							}
 							
 							focused.wrappedValue = course.id
@@ -68,6 +73,8 @@ struct GPAContent: View {
 							}
 							
 							resetCourse(course)
+							
+							selectionFeedbackTrigger += 1
 						}
 						
 						Divider()
@@ -81,10 +88,7 @@ struct GPAContent: View {
 								Task {
 									withAnimation {
 										courses.removeAll { $0.id == course.id }
-										
-										if courses.isEmpty {
-											editMode = .inactive
-										}
+										selectionFeedbackTrigger += 1
 									}
 								}
 							} else {
@@ -93,6 +97,8 @@ struct GPAContent: View {
 									
 									if courses.isEmpty {
 										editMode = .inactive
+									} else {
+										selectionFeedbackTrigger += 1
 									}
 								}
 							}
@@ -143,10 +149,12 @@ struct GPAContent: View {
 		.contextMenu {
 			Button("Copy Unweighted", systemImage: "document.on.document") {
 				UIPasteboard.general.string = unweightedGPA.formatted(.number.precision(.fractionLength(2)))
+				successFeedbackTrigger += 1
 			}
 			
 			Button("Copy Weighted", systemImage: "document.on.document") {
 				UIPasteboard.general.string = weightedGPA.formatted(.number.precision(.fractionLength(2)))
+				successFeedbackTrigger += 1
 			}
 		}
 		.id("bottom")

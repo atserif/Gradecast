@@ -21,7 +21,8 @@ struct GPAView: View {
 	// Prevents changes in selection while deletion is occurring
 	@State private var temporarySelection: Set<UUID> = []
 	
-	@State private var feedbackTrigger: Int = 0
+	@State private var selectionFeedbackTrigger: Int = 0
+	@State private var successFeedbackTrigger: Int = 0
 	@State private var deleteConfirmationPresented: Bool = false
 	@State private var infoSheetPresented: Bool = false
 	
@@ -56,7 +57,7 @@ struct GPAView: View {
 			ScrollViewReader { proxy in
 				List(selection: $selection) {
 					if !courses.isEmpty {
-						GPAContent(courses: $courses, editMode: $editMode, focused: $focused, unweightedGPA: unweightedGPA, weightedGPA: weightedGPA)
+						GPAContent(courses: $courses, editMode: $editMode, selectionFeedbackTrigger: $selectionFeedbackTrigger, successFeedbackTrigger: $successFeedbackTrigger, focused: $focused, unweightedGPA: unweightedGPA, weightedGPA: weightedGPA)
 					}
 				}
 				.onAppear {
@@ -153,11 +154,11 @@ struct GPAView: View {
 						
 						ToolbarItemGroup(placement: .primaryAction) {
 							Button("New Course", systemImage: "plus") {
-								feedbackTrigger += 1
-								
 								withAnimation {
 									newCourse()
 									proxy.scrollTo("bottom", anchor: .top)
+									
+									selectionFeedbackTrigger += 1
 								}
 							}
 							.disabled(courses.count >= 20)
@@ -180,8 +181,8 @@ struct GPAView: View {
 						if selection.count == courses.count {
 							ToolbarItem(placement: .topBarTrailing) {
 								Button {
-									feedbackTrigger += 1
 									selection.removeAll()
+									selectionFeedbackTrigger += 1
 								} label: {
 									Text("Deselect All")
 										// Fixes default styling when Show Borders is enabled
@@ -192,8 +193,8 @@ struct GPAView: View {
 						} else {
 							ToolbarItem(placement: .topBarTrailing) {
 								Button {
-									feedbackTrigger += 1
 									selection = Set(courses.map { $0.id })
+									selectionFeedbackTrigger += 1
 								} label: {
 									Text("Select All")
 										// Fixes default styling when Show Borders is enabled
@@ -214,11 +215,11 @@ struct GPAView: View {
 					
 					ToolbarItem(placement: .bottomBar) {
 						Button("Reset", systemImage: "arrow.counterclockwise") {
-							feedbackTrigger += 1
-							
 							for index in courses.indices where selection.contains(courses[index].id) {
 								resetCourse(at: index)
 							}
+							
+							selectionFeedbackTrigger += 1
 						}
 						.disabled(selection.isEmpty)
 					}
@@ -245,10 +246,10 @@ struct GPAView: View {
 					
 					ToolbarItem(placement: .bottomBar) {
 						Button("Delete", systemImage: "trash", role: .destructive) {
-							feedbackTrigger += 1
-							
 							temporarySelection = selection
 							deleteConfirmationPresented = true
+							
+							selectionFeedbackTrigger += 1
 						}
 						.confirmationDialog("Are you sure you want to delete \(selection.count == 1 ? "this course?" : "these courses?")", isPresented: $deleteConfirmationPresented, titleVisibility: .visible) {
 							Button("Delete \(selection.count == 1 ? "Course" : "\(selection.count) Courses")", role: .destructive) {
@@ -267,7 +268,8 @@ struct GPAView: View {
 				.sheet(isPresented: $infoSheetPresented) {
 					GPAInfoView()
 				}
-				.sensoryFeedback(.selection, trigger: feedbackTrigger)
+				.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
+				.sensoryFeedback(.success, trigger: successFeedbackTrigger)
 				.sensoryFeedback(.selection, trigger: editMode)
 				.toolbarVisibility(editMode == .inactive ? .visible : .hidden, for: .tabBar)
 				.toolbarVisibility(editMode == .inactive ? .hidden : .visible, for: .bottomBar)

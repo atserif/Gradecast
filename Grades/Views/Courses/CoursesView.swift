@@ -22,7 +22,9 @@ struct CoursesView: View {
 		GradingPeriod(id: 5, name: "Final", calculators: [.fullYear, .semester], type: .exam, grade: .A),
 		GradingPeriod(id: 5, name: "State Assessment", calculators: [.stateAssessed], type: .exam, grade: .A)
 	]
-
+	
+	@State private var selectionFeedbackTrigger: Int = 0
+	@State private var successFeedbackTrigger: Int = 0
 	@State private var infoSheetPresented: Bool = false
 	
 	private var courseGrade: Grade {
@@ -101,6 +103,7 @@ struct CoursesView: View {
 						.contextMenu {
 							Button("Reset", systemImage: "arrow.counterclockwise") {
 								gradingPeriod.grade = .A
+								selectionFeedbackTrigger += 1
 							}
 						}
 					}
@@ -119,6 +122,7 @@ struct CoursesView: View {
 					.contextMenu {
 						Button("Copy Course Grade", systemImage: "document.on.document") {
 							UIPasteboard.general.string = courseGrade.description
+							successFeedbackTrigger += 1
 						}
 					}
 				}
@@ -154,6 +158,8 @@ struct CoursesView: View {
 			.sheet(isPresented: $infoSheetPresented) {
 				CoursesInfoView()
 			}
+			.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
+			.sensoryFeedback(.success, trigger: successFeedbackTrigger)
 			// Accounts for the 2 2/3 pt gap between the segmented Picker's and List row's vertical bounds
 			.contentMargins(.top, 7 + (1 / 3))
 			.toolbarTitleDisplayMode(.inline)

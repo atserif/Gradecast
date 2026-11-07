@@ -14,7 +14,6 @@ private enum TabSelection {
 
 struct ContentView: View {
 	@State private var tabSelection: TabSelection = .courses
-	@State private var selectionFeedback: Int = 0
 	
 	var body: some View {
 		TabView(selection: $tabSelection) {
@@ -26,10 +25,7 @@ struct ContentView: View {
 				GPAView()
 			}
 		}
-		.onChange(of: tabSelection) {
-			selectionFeedback += 1
-		}
-		.sensoryFeedback(.selection, trigger: selectionFeedback)
+		.sensoryFeedback(.selection, trigger: tabSelection)
 	}
 }
 
