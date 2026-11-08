@@ -38,10 +38,10 @@ struct GPAContent: View {
 						Button("Delete", systemImage: "trash", role: .destructive) {
 							withAnimation {
 								courses.removeAll { $0.id == course.id }
-								
-								if courses.isEmpty {
-									editMode = .inactive
-								}
+							}
+							
+							if courses.isEmpty {
+								editMode = .inactive
 							}
 						}
 						
@@ -52,19 +52,14 @@ struct GPAContent: View {
 					// Individual selection context menu
 					.contextMenu {
 						Button("Rename", systemImage: "character.cursor.ibeam") {
-							if editMode != .inactive {
-								withAnimation {
-									editMode = .inactive
-								}
-							} else {
-								selectionFeedbackTrigger += 1
-							}
-							
+							editMode = .inactive
 							focused.wrappedValue = course.id
 							
 							Task {
 								textSelection = TextSelection(range: course.wrappedValue.name.startIndex..<course.wrappedValue.name.endIndex)
 							}
+							
+							selectionFeedbackTrigger += 1
 						}
 						
 						Button("Reset", systemImage: "arrow.counterclockwise") {
@@ -88,20 +83,19 @@ struct GPAContent: View {
 								Task {
 									withAnimation {
 										courses.removeAll { $0.id == course.id }
-										selectionFeedbackTrigger += 1
 									}
 								}
 							} else {
 								withAnimation {
 									courses.removeAll { $0.id == course.id }
-									
-									if courses.isEmpty {
-										editMode = .inactive
-									} else {
-										selectionFeedbackTrigger += 1
-									}
+								}
+								
+								if courses.isEmpty {
+									editMode = .inactive
 								}
 							}
+							
+							selectionFeedbackTrigger += 1
 						}
 					}
 					.id(course.id)

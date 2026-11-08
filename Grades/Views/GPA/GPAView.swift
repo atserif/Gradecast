@@ -86,6 +86,8 @@ struct GPAView: View {
 									resetCourse(at: index)
 								}
 							}
+							
+							selectionFeedbackTrigger += 1
 						}
 						
 						Divider()
@@ -102,10 +104,10 @@ struct GPAView: View {
 								selection.removeAll()
 								
 								if courses.isEmpty {
-									withAnimation {
-										editMode = .inactive
-									}
+									editMode = .inactive
 								}
+								
+								selectionFeedbackTrigger += 1
 							}
 						}
 					}
@@ -134,15 +136,13 @@ struct GPAView: View {
 									focused = nil
 									
 									Task {
-										withAnimation {
-											editMode = .active
-										}
-									}
-								} else {
-									withAnimation {
 										editMode = .active
 									}
+								} else {
+									editMode = .active
 								}
+								
+								selectionFeedbackTrigger += 1
 							} label: {
 								Text("Select")
 									// Fixes default styling when Show Borders is enabled
@@ -159,9 +159,9 @@ struct GPAView: View {
 								withAnimation {
 									newCourse()
 									proxy.scrollTo("bottom", anchor: .top)
-									
-									selectionFeedbackTrigger += 1
 								}
+								
+								selectionFeedbackTrigger += 1
 							}
 							.disabled(courses.count >= 20)
 							
@@ -208,9 +208,8 @@ struct GPAView: View {
 						
 						ToolbarItem(placement: .confirmationAction) {
 							Button("Confirm", systemImage: "checkmark", role: .confirm) {
-								withAnimation {
-									editMode = .inactive
-								}
+								editMode = .inactive
+								selectionFeedbackTrigger += 1
 							}
 						}
 					}
@@ -259,9 +258,10 @@ struct GPAView: View {
 									courses.removeAll { course in
 										temporarySelection.contains(course.id)
 									}
-									
-									editMode = .inactive
 								}
+								
+								editMode = .inactive
+								selectionFeedbackTrigger += 1
 							}
 						}
 						.disabled(selection.isEmpty)
@@ -273,7 +273,6 @@ struct GPAView: View {
 				}
 				.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 				.sensoryFeedback(.success, trigger: successFeedbackTrigger)
-				.sensoryFeedback(.selection, trigger: editMode)
 				.toolbarVisibility(editMode == .inactive ? .visible : .hidden, for: .tabBar)
 				.toolbarVisibility(editMode == .inactive ? .hidden : .visible, for: .bottomBar)
 				.toolbarTitleDisplayMode(.inline)
@@ -284,6 +283,7 @@ struct GPAView: View {
 				.headerGlow(.accent, isHiddenOnScroll: !courses.isEmpty)
 				.scrollDismissesKeyboard(.immediately)
 				.animation(.default, value: selection)
+				.animation(.default, value: editMode)
 				.environment(\.editMode, $editMode)
 			}
 		}
