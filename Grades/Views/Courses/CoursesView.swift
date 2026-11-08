@@ -158,6 +158,7 @@ struct CoursesView: View {
 			}
 			.sheet(isPresented: $infoSheetPresented) {
 				CoursesInfoView()
+					.presentationRimLight(.visible)
 			}
 			.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 			.sensoryFeedback(.success, trigger: successFeedbackTrigger)

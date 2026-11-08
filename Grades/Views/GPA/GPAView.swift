@@ -269,6 +269,7 @@ struct GPAView: View {
 				}
 				.sheet(isPresented: $infoSheetPresented) {
 					GPAInfoView()
+						.presentationRimLight(.visible)
 				}
 				.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 				.sensoryFeedback(.success, trigger: successFeedbackTrigger)
