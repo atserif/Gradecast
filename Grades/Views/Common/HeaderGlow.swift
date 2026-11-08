@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HeaderGlow: ViewModifier {
 	@Environment(\.colorScheme) private var colorScheme
+	
 	@State private var glowOpacity: Double = 0.5
 	
 	var color: Color

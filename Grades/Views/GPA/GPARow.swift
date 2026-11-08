@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GPARow: View {
-	@State private var credits: [Double] = [1.0, 0.5, 0.25]
+	@State private var credits: [Double] = [1, 0.5, 0.25]
 	@Binding var course: Course
 	@Binding var editMode: EditMode
 	@Binding var textSelection: TextSelection?
@@ -54,9 +54,9 @@ struct GPARow: View {
 					
 					Menu(course.credits.description, systemImage: "scalemass") {
 						Picker("Credits", selection: $course.credits) {
-							ForEach(credits, id: \.self) { credits in
-								Text(String(credits))
-									.tag(credits)
+							ForEach(credits, id: \.self) { creditValue in
+								Text(creditValue.description)
+									.tag(creditValue)
 							}
 						}
 						.labelsVisibility(.visible)

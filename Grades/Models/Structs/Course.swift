@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Course: Identifiable, Equatable, Codable {
-	var id = UUID()
+	var id: UUID = UUID()
 	let number: Int
 	
 	var name: String

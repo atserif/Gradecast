@@ -22,9 +22,9 @@ struct GPAContent: View {
 	
 	private func resetCourse(_ course: Binding<Course>) {
 		course.name.wrappedValue = "Course \(course.wrappedValue.number)"
-		course.grade.wrappedValue = .A
+		course.grade.wrappedValue = .a
 		course.level.wrappedValue = .regular
-		course.credits.wrappedValue = 1.0
+		course.credits.wrappedValue = 1
 	}
 	
 	var body: some View {
@@ -108,13 +108,11 @@ struct GPAContent: View {
 		
 		Section {
 			HStack(spacing: 16) {
-				LabeledContent {
+				LabeledContent("Unweighted") {
 					Text(unweightedGPA.formatted(.number.precision(.fractionLength(2))))
 						.monospacedDigit()
 						.contentTransition(.numericText())
 						.animation(.default, value: unweightedGPA)
-				} label: {
-					Text("Unweighted")
 				}
 				.frame(maxWidth: .infinity, alignment: .leading)
 				

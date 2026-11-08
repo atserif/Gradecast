@@ -12,7 +12,7 @@ struct CoursesInfoView: View {
 	@Environment(\.accessibilityShowBorders) private var showBorders
 	
 	@State private var selectionFeedbackTrigger: Int = 0
-
+	
 	var body: some View {
 		NavigationStack {
 			List {

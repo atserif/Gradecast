@@ -1,5 +1,5 @@
 //
-//  SimpleLabelStyle.swift
+//  PickerLabelStyle.swift
 //  Grades
 //
 //  Created by Aram Soneson on 7/24/26.

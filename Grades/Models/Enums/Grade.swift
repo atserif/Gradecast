@@ -6,19 +6,19 @@
 //
 
 enum Grade: Double, CaseIterable, Codable {
-	case A = 4
-	case B = 3
-	case C = 2
-	case D = 1
-	case E = 0
+	case a = 4
+	case b = 3
+	case c = 2
+	case d = 1
+	case e = 0
 	
 	var description: String {
 		switch self {
-		case .A: "A"
-		case .B: "B"
-		case .C: "C"
-		case .D: "D"
-		case .E: "E"
+		case .a: "A"
+		case .b: "B"
+		case .c: "C"
+		case .d: "D"
+		case .e: "E"
 		}
 	}
 }

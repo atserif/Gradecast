@@ -6,5 +6,6 @@
 //
 
 enum `Type`: Codable {
-	case quarter, exam
+	case quarter
+	case exam
 }

@@ -16,12 +16,12 @@ struct CoursesView: View {
 	
 	@State private var calculatorSelection: Calculator = .fullYear
 	@State private var gradingPeriods: [GradingPeriod] = [
-		GradingPeriod(id: 1, name: "Quarter 1", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .A),
-		GradingPeriod(id: 2, name: "Quarter 2", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .A),
-		GradingPeriod(id: 3, name: "Quarter 3", calculators: [.fullYear, .stateAssessed], type: .quarter, grade: .A),
-		GradingPeriod(id: 4, name: "Quarter 4", calculators: [.fullYear, .stateAssessed], type: .quarter, grade: .A),
-		GradingPeriod(id: 5, name: "Final", calculators: [.fullYear, .semester], type: .exam, grade: .A),
-		GradingPeriod(id: 5, name: "State Assessment", calculators: [.stateAssessed], type: .exam, grade: .A)
+		GradingPeriod(id: 1, name: "Quarter 1", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .a),
+		GradingPeriod(id: 2, name: "Quarter 2", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .a),
+		GradingPeriod(id: 3, name: "Quarter 3", calculators: [.fullYear, .stateAssessed], type: .quarter, grade: .a),
+		GradingPeriod(id: 4, name: "Quarter 4", calculators: [.fullYear, .stateAssessed], type: .quarter, grade: .a),
+		GradingPeriod(id: 5, name: "Final", calculators: [.fullYear, .semester], type: .exam, grade: .a),
+		GradingPeriod(id: 5, name: "State Assessment", calculators: [.stateAssessed], type: .exam, grade: .a)
 	]
 	
 	@State private var selectionFeedbackTrigger: Int = 0
@@ -29,8 +29,6 @@ struct CoursesView: View {
 	@State private var infoSheetPresented: Bool = false
 	
 	private var courseGrade: Grade {
-		var letterGrade: Grade
-		
 		let quarterTotal: Double
 		let examTotal: Double
 		
@@ -48,20 +46,13 @@ struct CoursesView: View {
 		
 		let average: Double = (quarterTotal + examTotal) / 100
 		
-		switch average {
-		case 3.5...:
-			letterGrade = .A
-		case 2.5..<3.5:
-			letterGrade = .B
-		case 1.5..<2.5:
-			letterGrade = .C
-		case 0.75..<1.5:
-			letterGrade = .D
-		default:
-			letterGrade = .E
+		return switch average {
+		case 3.5...: .a
+		case 2.5..<3.5: .b
+		case 1.5..<2.5: .c
+		case 0.75..<1.5: .d
+		default: .e
 		}
-		
-		return letterGrade
 	}
 	
 	var body: some View {
@@ -98,12 +89,12 @@ struct CoursesView: View {
 						.tint(.secondary)
 						.swipeActions {
 							Button("Reset", systemImage: "arrow.counterclockwise") {
-								gradingPeriod.grade = .A
+								gradingPeriod.grade = .a
 							}
 						}
 						.contextMenu {
 							Button("Reset", systemImage: "arrow.counterclockwise") {
-								gradingPeriod.grade = .A
+								gradingPeriod.grade = .a
 								selectionFeedbackTrigger += 1
 							}
 						}
@@ -129,10 +120,10 @@ struct CoursesView: View {
 				}
 			}
 			// Syncs Final and State Assessment grades
-			.onChange(of: gradingPeriods[4].grade) { oldValue, newValue in
+			.onChange(of: gradingPeriods[4].grade) { _, newValue in
 				gradingPeriods[5].grade = newValue
 			}
-			.onChange(of: gradingPeriods[5].grade) { oldValue, newValue in
+			.onChange(of: gradingPeriods[5].grade) { _, newValue in
 				gradingPeriods[4].grade = newValue
 			}
 			.toolbar {
@@ -151,8 +142,8 @@ struct CoursesView: View {
 						}
 					}
 					.sensoryFeedback(.selection, trigger: rememberCoursesChanges)
-					.sensoryFeedback(.selection, trigger: infoSheetPresented) { oldValue, newValue in
-						newValue == true
+					.sensoryFeedback(.selection, trigger: infoSheetPresented) { _, newValue in
+						newValue
 					}
 				}
 			}

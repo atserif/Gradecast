@@ -21,7 +21,7 @@ struct GPAInfoView: View {
 						.font(.headline)
 					
 					ForEach(Grade.allCases, id: \.self) { grade in
-						LabeledContent(grade.description, value: "\(grade.rawValue)")
+						LabeledContent(grade.description, value: grade.rawValue.description)
 							.monospacedDigit()
 					}
 				}

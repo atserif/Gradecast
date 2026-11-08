@@ -42,15 +42,15 @@ struct GPAView: View {
 	
 	private func newCourse() {
 		courseNumber += 1
-		let newCourse = Course(number: courseNumber, name: "Course \(courseNumber)", grade: .A, level: .regular, credits: 1.0)
+		let newCourse: Course = Course(number: courseNumber, name: "Course \(courseNumber)", grade: .a, level: .regular, credits: 1)
 		
 		courses.append(newCourse)
 	}
 	private func resetCourse(at index: Int) {
 		courses[index].name = "Course \(courses[index].number)"
-		courses[index].grade = .A
+		courses[index].grade = .a
 		courses[index].level = .regular
-		courses[index].credits = 1.0
+		courses[index].credits = 1
 	}
 	
 	var body: some View {
@@ -78,13 +78,11 @@ struct GPAView: View {
 					}
 				}
 				// Multiple selection context menu
-				.contextMenu(forSelectionType: Course.ID.self) { selectedCourses in
-					if selectedCourses.isEmpty { } else if selection.count > 1 {
+				.contextMenu(forSelectionType: UUID.self) { selectedCourses in
+					if !selectedCourses.isEmpty && selection.count > 1 {
 						Button("Reset", systemImage: "arrow.counterclockwise") {
-							for index in courses.indices {
-								if selectedCourses.contains(courses[index].id) {
-									resetCourse(at: index)
-								}
+							for index in courses.indices where selectedCourses.contains(courses[index].id) {
+								resetCourse(at: index)
 							}
 							
 							selectionFeedbackTrigger += 1
@@ -175,8 +173,8 @@ struct GPAView: View {
 								}
 							}
 							.sensoryFeedback(.selection, trigger: rememberGPAChanges)
-							.sensoryFeedback(.selection, trigger: infoSheetPresented) { oldValue, newValue in
-								newValue == true
+							.sensoryFeedback(.selection, trigger: infoSheetPresented) { _, newValue in
+								newValue
 							}
 						}
 					} else {
@@ -255,9 +253,7 @@ struct GPAView: View {
 						.confirmationDialog("Are you sure you want to delete \(selection.count == 1 ? "this course?" : "these courses?")", isPresented: $deleteConfirmationPresented, titleVisibility: .visible) {
 							Button("Delete \(selection.count == 1 ? "Course" : "\(selection.count) Courses")", role: .destructive) {
 								withAnimation {
-									courses.removeAll { course in
-										temporarySelection.contains(course.id)
-									}
+									courses.removeAll { temporarySelection.contains($0.id) }
 								}
 								
 								editMode = .inactive
