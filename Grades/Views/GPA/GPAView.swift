@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GPAView: View {
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	@Environment(\.accessibilityShowBorders) private var showBorders
 	
@@ -61,7 +62,7 @@ struct GPAView: View {
 					}
 				}
 				.onAppear {
-					// Enable better reordering UI and behavior
+					// Enables better reordering UI and behavior
 					UICollectionView.appearance().dragDelegate = nil
 					UICollectionView.appearance().dropDelegate = nil
 				}
@@ -117,7 +118,8 @@ struct GPAView: View {
 						} description: {
 							Text("Courses you add will appear here.")
 						}
-						.background(Color(.systemGroupedBackground))
+						// Ensures the header glow effect shines through
+						.background(colorScheme == .dark ? .clear : Color(.systemGroupedBackground))
 					}
 				}
 				.toolbar {
@@ -276,6 +278,9 @@ struct GPAView: View {
 				.toolbarTitleDisplayMode(.inline)
 				.toolbarRole(.editor)
 				.scrollEdgeEffectStyle(.soft, for: .all)
+				// Implements the header glow effect
+				.scrollContentBackground(colorScheme == .dark ? .hidden : .visible)
+				.headerGlow(.accent, isHiddenOnScroll: !courses.isEmpty)
 				.scrollDismissesKeyboard(.immediately)
 				.animation(.default, value: selection)
 				.environment(\.editMode, $editMode)

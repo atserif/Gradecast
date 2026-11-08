@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CoursesView: View {
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 	
 	@AppStorage("rememberCoursesChanges") private var rememberCoursesChanges: Bool = true
@@ -127,7 +128,7 @@ struct CoursesView: View {
 					}
 				}
 			}
-			// Sync Final and State Assessment grades
+			// Syncs Final and State Assessment grades
 			.onChange(of: gradingPeriods[4].grade) { oldValue, newValue in
 				gradingPeriods[5].grade = newValue
 			}
@@ -160,11 +161,14 @@ struct CoursesView: View {
 			}
 			.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 			.sensoryFeedback(.success, trigger: successFeedbackTrigger)
-			// Accounts for the 2 2/3 pt gap between the segmented Picker's and List row's vertical bounds
+			// Accounts for the 2 2/3 pt gap between the vertical bounds of the segmented Picker and List row
 			.contentMargins(.top, 7 + (1 / 3))
 			.toolbarTitleDisplayMode(.inline)
 			.toolbarRole(.editor)
 			.scrollEdgeEffectStyle(.soft, for: .all)
+			// Implements the header glow effect
+			.scrollContentBackground(colorScheme == .dark ? .hidden : .visible)
+			.headerGlow(.accent)
 		}
 		.onAppear {
 			if rememberCoursesChanges {
