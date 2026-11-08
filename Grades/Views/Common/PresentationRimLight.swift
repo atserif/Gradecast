@@ -17,8 +17,7 @@ struct PresentationRimLight: ViewModifier {
 			content
 				.overlay {
 					ContainerRelativeShape()
-						.strokeBorder(.white.opacity(0.075).exposureAdjust(colorScheme == .dark ? 0 : 1.5), lineWidth: 1)
-						.ignoresSafeArea()
+						.strokeBorder(.white.opacity(0.075).exposureAdjust(colorScheme == .dark ? 1 : 1.8), lineWidth: 1)
 						.mask {
 							VStack(spacing: 0) {
 								LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .top, endPoint: .bottom)
@@ -28,6 +27,7 @@ struct PresentationRimLight: ViewModifier {
 									.fill(.clear)
 							}
 						}
+						.ignoresSafeArea()
 				}
 		}
 	}
