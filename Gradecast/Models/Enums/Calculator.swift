@@ -17,4 +17,6 @@ enum Calculator: CaseIterable, Codable {
 		case .stateAssessed: "State-Assessed"
 		}
 	}
+	
+	// TODO: Store calculator weights here and update CoursesView course calculation logic and CoursesInfoView text accordingly
 }
