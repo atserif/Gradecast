@@ -1,11 +1,11 @@
 //
-//  Type.swift
+//  GradingPeriodType.swift
 //  Gradecast
 //
 //  Created by Aram Soneson on 8/24/26.
 //
 
-enum `Type`: Codable {
+enum GradingPeriodType: Codable {
 	case quarter
 	case exam
 }

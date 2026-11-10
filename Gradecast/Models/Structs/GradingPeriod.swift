@@ -9,6 +9,6 @@ struct GradingPeriod: Identifiable, Equatable, Codable {
 	let id: Int
 	let name: String
 	let calculators: [Calculator]
-	let type: `Type`
+	let type: GradingPeriodType
 	var grade: Grade
 }
