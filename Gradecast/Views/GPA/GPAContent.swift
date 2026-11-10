@@ -21,11 +21,14 @@ struct GPAContent: View {
 	let unweightedGPA: Double
 	let weightedGPA: Double
 	
-	private func resetCourse(_ course: Binding<Course>) {
-		course.name.wrappedValue = "Course \(course.wrappedValue.number)"
-		course.grade.wrappedValue = .a
-		course.level.wrappedValue = .regular
-		course.credits.wrappedValue = 1
+	private func deleteCourse(id: UUID) {
+		withAnimation {
+			courses.removeAll { $0.id == id }
+		}
+		
+		if courses.isEmpty {
+			editMode = .inactive
+		}
 	}
 	
 	var body: some View {
@@ -37,17 +40,19 @@ struct GPAContent: View {
 					.alignmentGuide(.listRowSeparatorLeading) { _ in 16 }
 					.swipeActions {
 						Button("Delete", systemImage: "trash", role: .destructive) {
-							withAnimation {
-								courses.removeAll { $0.id == course.id }
+							if focused.wrappedValue == course.id {
+								focused.wrappedValue = nil
 							}
 							
-							if courses.isEmpty {
-								editMode = .inactive
-							}
+							deleteCourse(id: course.id)
 						}
 						
 						Button("Reset", systemImage: "arrow.counterclockwise") {
-							resetCourse(course)
+							if focused.wrappedValue == course.id {
+								focused.wrappedValue = nil
+							}
+							
+							course.wrappedValue.reset()
 						}
 					}
 					// Individual selection context menu
@@ -68,7 +73,7 @@ struct GPAContent: View {
 								focused.wrappedValue = nil
 							}
 							
-							resetCourse(course)
+							course.wrappedValue.reset()
 							
 							selectionFeedbackTrigger += 1
 						}
@@ -77,23 +82,11 @@ struct GPAContent: View {
 						
 						Button("Delete", systemImage: "trash", role: .destructive) {
 							if focused.wrappedValue == course.id {
-								withAnimation(.none) {
-									focused.wrappedValue = nil
-								}
-								
-								Task {
-									withAnimation {
-										courses.removeAll { $0.id == course.id }
-									}
-								}
-							} else {
-								withAnimation {
-									courses.removeAll { $0.id == course.id }
-								}
-								
-								if courses.isEmpty {
-									editMode = .inactive
-								}
+								focused.wrappedValue = nil
+							}
+							
+							Task {
+								deleteCourse(id: course.id)
 							}
 							
 							selectionFeedbackTrigger += 1

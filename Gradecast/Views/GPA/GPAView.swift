@@ -84,7 +84,7 @@ struct GPAView: View {
 					if !selectedCourses.isEmpty && selection.count > 1 {
 						Button("Reset", systemImage: "arrow.counterclockwise") {
 							for index in courses.indices where selectedCourses.contains(courses[index].id) {
-								resetCourse(at: index)
+								courses[index].reset()
 							}
 							
 							selectionFeedbackTrigger += 1
@@ -217,7 +217,7 @@ struct GPAView: View {
 					ToolbarItem(placement: .bottomBar) {
 						Button("Reset", systemImage: "arrow.counterclockwise") {
 							for index in courses.indices where selection.contains(courses[index].id) {
-								resetCourse(at: index)
+								courses[index].reset()
 							}
 							
 							selectionFeedbackTrigger += 1
