@@ -31,8 +31,8 @@ struct HeaderGlow: ViewModifier {
 							.animation(.default, value: glowOpacity)
 					}
 				}
-				.onScrollGeometryChange(for: Bool.self) { geometry in
-					geometry.contentOffset.y + geometry.contentInsets.top - 10 > 0
+				.onScrollGeometryChange(for: Bool.self) { scrollGeometry in
+					scrollGeometry.contentOffset.y + scrollGeometry.contentInsets.top - 10 > 0
 				} action: { _, newValue in
 					isScrolled = newValue
 				}
