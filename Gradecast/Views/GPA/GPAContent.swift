@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GPAContent: View {
 	@State private var textSelection: TextSelection?
+	
 	@Binding var courses: [Course]
 	@Binding var editMode: EditMode
 	

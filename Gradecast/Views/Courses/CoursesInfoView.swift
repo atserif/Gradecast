@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CoursesInfoView: View {
 	@Environment(\.dismiss) private var dismiss
-	@Environment(\.accessibilityShowBorders) private var showBorders
 	
 	@State private var selectionFeedbackTrigger: Int = 0
 	
