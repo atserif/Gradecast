@@ -16,6 +16,8 @@ struct GPAView: View {
 	@AppStorage("coursesData") private var coursesData: Data = Data()
 	@AppStorage("courseNumber") private var courseNumber: Int = 0
 	
+	@State private var hasLaunched: Bool = false
+	
 	@State private var courses: [Course] = []
 	@State private var editMode: EditMode = .inactive
 	@State private var selection: Set<UUID> = []
@@ -285,6 +287,9 @@ struct GPAView: View {
 			}
 		}
 		.onAppear {
+			guard !hasLaunched else { return }
+			hasLaunched = true
+			
 			if rememberGPAChanges {
 				loadCourses()
 			} else {
@@ -292,7 +297,14 @@ struct GPAView: View {
 			}
 		}
 		.onChange(of: courses) {
-			saveCourses()
+			if rememberGPAChanges {
+				saveCourses()
+			}
+		}
+		.onChange(of: rememberGPAChanges) {
+			if rememberGPAChanges {
+				saveCourses()
+			}
 		}
 	}
 	

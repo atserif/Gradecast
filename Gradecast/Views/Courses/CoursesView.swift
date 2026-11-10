@@ -14,6 +14,8 @@ struct CoursesView: View {
 	@AppStorage("rememberCoursesChanges") private var rememberCoursesChanges: Bool = true
 	@AppStorage("gradingPeriodsData") private var gradingPeriodsData: Data = Data()
 	
+	@State private var hasLaunched: Bool = false
+	
 	@State private var calculatorSelection: Calculator = .fullYear
 	@State private var gradingPeriods: [GradingPeriod] = [
 		GradingPeriod(id: 1, name: "Quarter 1", calculators: [.fullYear, .semester, .stateAssessed], type: .quarter, grade: .a),
@@ -164,11 +166,19 @@ struct CoursesView: View {
 			.headerGlow(.accent)
 		}
 		.onAppear {
+			guard !hasLaunched else { return }
+			hasLaunched = true
+			
 			if rememberCoursesChanges {
 				loadGradingPeriods()
 			}
 		}
 		.onChange(of: gradingPeriods) {
+			if rememberCoursesChanges {
+				saveGradingPeriods()
+			}
+		}
+		.onChange(of: rememberCoursesChanges) {
 			if rememberCoursesChanges {
 				saveGradingPeriods()
 			}
