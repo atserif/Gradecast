@@ -31,15 +31,12 @@ struct GPAView: View {
 	
 	@FocusState private var focused: UUID?
 	
-	private var unweightedGPA: Double {
-		let points: Double = courses.map { $0.grade.rawValue * $0.credits }.reduce(0, +)
+	private var gpa: (unweighted: Double, weighted: Double) {
+		let unweightedPoints: Double = courses.map { $0.grade.rawValue * $0.credits }.reduce(0, +)
+		let weightedPoints: Double = courses.map { ($0.grade.rawValue > 1 ? $0.grade.rawValue + $0.level.rawValue : $0.grade.rawValue) * $0.credits }.reduce(0, +)
 		let credits: Double = courses.map { $0.credits }.reduce(0, +)
-		return points / credits
-	}
-	private var weightedGPA: Double {
-		let points: Double = courses.map { ($0.grade.rawValue > 1 ? $0.grade.rawValue + $0.level.rawValue : $0.grade.rawValue) * $0.credits }.reduce(0, +)
-		let credits: Double = courses.map { $0.credits }.reduce(0, +)
-		return points / credits
+		
+		return (unweightedPoints / credits, weightedPoints / credits)
 	}
 	
 	private func newCourse() {
@@ -60,7 +57,9 @@ struct GPAView: View {
 			ScrollViewReader { proxy in
 				List(selection: $selection) {
 					if !courses.isEmpty {
-						GPAContent(courses: $courses, editMode: $editMode, selectionFeedbackTrigger: $selectionFeedbackTrigger, successFeedbackTrigger: $successFeedbackTrigger, focused: $focused, unweightedGPA: unweightedGPA, weightedGPA: weightedGPA)
+						let result = gpa
+						
+						GPAContent(courses: $courses,editMode: $editMode, selectionFeedbackTrigger: $selectionFeedbackTrigger, successFeedbackTrigger: $successFeedbackTrigger, focused: $focused, unweightedGPA: result.unweighted, weightedGPA: result.weighted)
 					}
 				}
 				.onAppear {
