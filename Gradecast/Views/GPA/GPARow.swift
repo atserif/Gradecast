@@ -20,7 +20,7 @@ struct GPARow: View {
 		VStack(alignment: .leading) {
 			TextField("Course Name", text: $course.name, selection: $textSelection, prompt: Text("Course Name"))
 				// Enables editing when rename button is pressed
-				.allowsHitTesting(editMode == .inactive && focused.wrappedValue != nil && course.id == focused.wrappedValue)
+				.allowsHitTesting(!editMode.isEditing && focused.wrappedValue == course.id)
 				.font(.headline)
 				.padding(.horizontal)
 				.focused(focused, equals: course.id)
@@ -67,7 +67,7 @@ struct GPARow: View {
 				.buttonStyle(.borderless)
 				.padding(.horizontal)
 			}
-			.allowsHitTesting(editMode == .inactive)
+			.allowsHitTesting(!editMode.isEditing)
 			.scrollIndicators(.hidden)
 			.scrollBounceBehavior(.basedOnSize, axes: .horizontal)
 			.mask {

@@ -75,7 +75,7 @@ struct GPAView: View {
 				}
 				// TODO: Implement a better method of disabling selected row highlight when editMode is disabled
 				.onChange(of: selection) {
-					if editMode == .inactive {
+					if !editMode.isEditing {
 						selection.removeAll()
 					}
 				}
@@ -129,7 +129,7 @@ struct GPAView: View {
 						StaticNavigationTitle(title: "GPA")
 					}
 					
-					if editMode == .inactive {
+					if !editMode.isEditing {
 						ToolbarItem(placement: .topBarTrailing) {
 							Button {
 								if focused != nil {
@@ -272,8 +272,8 @@ struct GPAView: View {
 				}
 				.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 				.sensoryFeedback(.success, trigger: successFeedbackTrigger)
-				.toolbarVisibility(editMode == .inactive ? .visible : .hidden, for: .tabBar)
-				.toolbarVisibility(editMode == .inactive ? .hidden : .visible, for: .bottomBar)
+				.toolbarVisibility(!editMode.isEditing ? .visible : .hidden, for: .tabBar)
+				.toolbarVisibility(!editMode.isEditing ? .hidden : .visible, for: .bottomBar)
 				.toolbarTitleDisplayMode(.inline)
 				.toolbarRole(.editor)
 				.scrollEdgeEffectStyle(.soft, for: .all)
