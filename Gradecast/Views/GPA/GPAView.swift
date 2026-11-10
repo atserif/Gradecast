@@ -41,15 +41,7 @@ struct GPAView: View {
 	
 	private func newCourse() {
 		courseNumber += 1
-		let newCourse: Course = Course(number: courseNumber, name: "Course \(courseNumber)", grade: .a, level: .regular, credits: 1)
-		
-		courses.append(newCourse)
-	}
-	private func resetCourse(at index: Int) {
-		courses[index].name = "Course \(courses[index].number)"
-		courses[index].grade = .a
-		courses[index].level = .regular
-		courses[index].credits = 1
+		courses.append(Course(number: courseNumber, name: "Course \(courseNumber)", grade: .a, level: .regular, credits: 1))
 	}
 	
 	var body: some View {
@@ -155,9 +147,13 @@ struct GPAView: View {
 						
 						ToolbarItemGroup(placement: .primaryAction) {
 							Button("New Course", systemImage: "plus") {
-								withAnimation {
-									newCourse()
-									proxy.scrollTo("bottom", anchor: .top)
+								focused = nil
+								
+								Task {
+									withAnimation {
+										newCourse()
+										proxy.scrollTo("bottom", anchor: .top)
+									}
 								}
 								
 								selectionFeedbackTrigger += 1
@@ -170,6 +166,7 @@ struct GPAView: View {
 								Divider()
 								
 								Button("About GPA", systemImage: "info.circle") {
+									focused = nil
 									infoSheetPresented = true
 								}
 							}
