@@ -10,10 +10,14 @@ import SwiftUI
 struct HeaderGlow: ViewModifier {
 	@Environment(\.colorScheme) private var colorScheme
 	
-	@State private var glowOpacity: Double = 0.3
-	
+	@State private var isScrolled = false
+
 	var color: Color
 	var isHiddenOnScroll: Bool = true
+
+	private var glowOpacity: Double {
+		isHiddenOnScroll && isScrolled ? 0 : 0.3
+	}
 	
 	func body(content: Content) -> some View {
 		GeometryReader { geometry in
@@ -24,14 +28,13 @@ struct HeaderGlow: ViewModifier {
 							.frame(width: geometry.size.width * 3, height: geometry.safeAreaInsets.top * 5)
 							.padding(.top, -50)
 							.ignoresSafeArea()
+							.animation(.default, value: glowOpacity)
 					}
 				}
 				.onScrollGeometryChange(for: Bool.self) { geometry in
 					geometry.contentOffset.y + geometry.contentInsets.top - 10 > 0
-				} action: { _, isScrolled in
-					withAnimation {
-						glowOpacity = isHiddenOnScroll && isScrolled ? 0 : 0.3
-					}
+				} action: { _, newValue in
+					isScrolled = newValue
 				}
 		}
 	}
