@@ -31,7 +31,7 @@ struct GPAContent: View {
 	var body: some View {
 		Section {
 			ForEach($courses, editActions: .move) { course in
-				GPARow(course: course, editMode: $editMode, textSelection: $textSelection, focused: focused)
+				GPARow(textSelection: $textSelection, course: course, editMode: editMode, focused: focused)
 					// Prevents horizontal ScrollView from clipping when scrolled
 					.listRowInsets(EdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0))
 					.alignmentGuide(.listRowSeparatorLeading) { _ in 16 }

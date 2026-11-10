@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct GPARow: View {
-	@State private var credits: [Double] = [1, 0.5, 0.25]
-	@Binding var course: Course
-	@Binding var editMode: EditMode
 	@Binding var textSelection: TextSelection?
+	@Binding var course: Course
+	
+	let editMode: EditMode
+	private let credits: [Double] = [1, 0.5, 0.25]
 	
 	var focused: FocusState<UUID?>.Binding
 	
