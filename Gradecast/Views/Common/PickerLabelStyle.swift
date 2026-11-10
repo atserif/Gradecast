@@ -12,32 +12,24 @@ struct PickerLabelStyle: LabelStyle {
 	@ScaledMetric(relativeTo: .largeTitle) private var dynamicPadding: CGFloat = 12
 	
 	func makeBody(configuration: Configuration) -> some View {
-		if !showBorders {
-			HStack(spacing: 4) {
-				configuration.icon
-				
-				configuration.title
-				
-				Image(systemName: "chevron.up.chevron.down")
-					.imageScale(.small)
+		HStack(spacing: 4) {
+			configuration.icon
+			
+			configuration.title
+				.underline(false)
+			
+			Image(systemName: "chevron.up.chevron.down")
+				.imageScale(.small)
+		}
+		.tint(.secondary)
+		// Matches default Picker styling when Show Borders is enabled
+		.padding(.vertical, showBorders ? 8 : 0)
+		.padding(.horizontal, showBorders ? dynamicPadding : 0)
+		.background {
+			if showBorders {
+				Capsule()
+					.fill(Color(.tertiarySystemFill))
 			}
-			.tint(.secondary)
-		} else {
-			HStack(spacing: 4) {
-				configuration.icon
-				
-				configuration.title
-					.underline(false)
-				
-				Image(systemName: "chevron.up.chevron.down")
-					.imageScale(.small)
-			}
-			.tint(.secondary)
-			// Matches default Picker styling when Show Borders is enabled
-			.padding(.vertical, 8)
-			.padding(.horizontal, dynamicPadding)
-			.background(Color(.tertiarySystemFill))
-			.clipShape(.capsule)
 		}
 	}
 }
