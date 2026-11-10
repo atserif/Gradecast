@@ -13,9 +13,9 @@ struct PresentationRimLight: ViewModifier {
 	var visibility: Visibility
 	
 	func body(content: Content) -> some View {
-		if visibility == .visible {
-			content
-				.overlay {
+		content
+			.overlay {
+				if visibility == .visible {
 					ContainerRelativeShape()
 						.strokeBorder(.white.opacity(0.075).exposureAdjust(colorScheme == .dark ? 1 : 1.8), lineWidth: 1)
 						.mask {
@@ -29,7 +29,7 @@ struct PresentationRimLight: ViewModifier {
 						}
 						.ignoresSafeArea()
 				}
-		}
+			}
 	}
 }
 
