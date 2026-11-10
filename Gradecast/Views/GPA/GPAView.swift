@@ -252,8 +252,8 @@ struct GPAView: View {
 							
 							selectionFeedbackTrigger += 1
 						}
-						.confirmationDialog("Are you sure you want to delete \(selection.count == 1 ? "this course?" : "these courses?")", isPresented: $deleteConfirmationPresented, titleVisibility: .visible) {
-							Button("Delete \(selection.count == 1 ? "Course" : "\(selection.count) Courses")", role: .destructive) {
+						.confirmationDialog("Are you sure you want to delete \(temporarySelection.count == 1 ? "this course?" : "these courses?")", isPresented: $deleteConfirmationPresented, titleVisibility: .visible) {
+							Button("Delete \(temporarySelection.count == 1 ? "Course" : "\(temporarySelection.count) Courses")", role: .destructive) {
 								withAnimation {
 									courses.removeAll { temporarySelection.contains($0.id) }
 								}
