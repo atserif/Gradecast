@@ -163,7 +163,7 @@ struct CoursesView: View {
 			.scrollEdgeEffectStyle(.soft, for: .all)
 			// Implements the header glow effect
 			.scrollContentBackground(colorScheme == .dark ? .hidden : .visible)
-			.headerGlow(.accent)
+			.headerGlow(.accent, isFocused: !infoSheetPresented)
 		}
 		.onAppear {
 			guard !hasLaunched else { return }

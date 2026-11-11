@@ -10,9 +10,10 @@ import SwiftUI
 struct HeaderGlow: ViewModifier {
 	@Environment(\.colorScheme) private var colorScheme
 	
-	@State private var isScrolled = false
-
+	@State private var isScrolled: Bool = false
+	
 	var color: Color
+	var isFocused: Bool = true
 	var isHiddenOnScroll: Bool = true
 
 	private var glowOpacity: Double {
@@ -25,10 +26,12 @@ struct HeaderGlow: ViewModifier {
 				.background(alignment: .top) {
 					if colorScheme == .dark {
 						EllipticalGradient(stops: [.init(color: color.opacity(glowOpacity), location: 0), .init(color: .clear, location: 1)], center: .top)
-							.frame(width: geometry.size.width * 3, height: geometry.safeAreaInsets.top * 5)
+							.frame(width: geometry.size.width * 2, height: geometry.safeAreaInsets.top * 5)
 							.padding(.top, -50)
+							.saturation(isFocused ? 1 : 0)
 							.ignoresSafeArea()
 							.animation(.default, value: glowOpacity)
+							.animation(.default, value: isFocused)
 					}
 				}
 				.onScrollGeometryChange(for: Bool.self) { scrollGeometry in
@@ -41,7 +44,7 @@ struct HeaderGlow: ViewModifier {
 }
 
 extension View {
-	func headerGlow(_ color: Color, isHiddenOnScroll: Bool = true) -> some View {
-		modifier(HeaderGlow(color: color, isHiddenOnScroll: isHiddenOnScroll))
+	func headerGlow(_ color: Color, isFocused: Bool, isHiddenOnScroll: Bool = true) -> some View {
+		modifier(HeaderGlow(color: color, isFocused: isFocused, isHiddenOnScroll: isHiddenOnScroll))
 	}
 }
