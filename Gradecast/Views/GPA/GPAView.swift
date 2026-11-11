@@ -275,6 +275,7 @@ struct GPAView: View {
 				.scrollEdgeEffectStyle(.soft, for: .all)
 				// Implements the header glow effect
 				.scrollContentBackground(colorScheme == .dark ? .hidden : .visible)
+				// TODO: Disable header glow when confirmation dialog is open
 				.headerGlow(.accent, isFocused: !infoSheetPresented, isHiddenOnScroll: !courses.isEmpty)
 				.scrollDismissesKeyboard(.immediately)
 				.animation(.default, value: selection)
