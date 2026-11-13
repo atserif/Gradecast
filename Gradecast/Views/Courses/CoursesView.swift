@@ -86,8 +86,6 @@ struct CoursesView: View {
 							Text(gradingPeriod.name)
 								.contentTransition(.numericText())
 						}
-						// Prevents tapping anywhere in the row from triggering the menu
-						.pickerStyle(.menu)
 						.tint(.secondary)
 						.swipeActions {
 							Button("Reset", systemImage: "arrow.counterclockwise") {
