@@ -14,7 +14,6 @@ struct GPAContent: View {
 	@Binding var editMode: EditMode
 	
 	@Binding var selectionFeedbackTrigger: Int
-	@Binding var successFeedbackTrigger: Int
 	
 	var focused: FocusState<UUID?>.Binding
 	
@@ -135,12 +134,12 @@ struct GPAContent: View {
 		.contextMenu {
 			Button("Copy Unweighted", systemImage: "document.on.document") {
 				UIPasteboard.general.string = unweightedGPA.formatted(.number.precision(.fractionLength(2)))
-				successFeedbackTrigger += 1
+				selectionFeedbackTrigger += 1
 			}
 			
 			Button("Copy Weighted", systemImage: "document.on.document") {
 				UIPasteboard.general.string = weightedGPA.formatted(.number.precision(.fractionLength(2)))
-				successFeedbackTrigger += 1
+				selectionFeedbackTrigger += 1
 			}
 		}
 		.id("bottom")

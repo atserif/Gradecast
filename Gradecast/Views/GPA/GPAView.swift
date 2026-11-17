@@ -25,7 +25,6 @@ struct GPAView: View {
 	@State private var temporarySelection: Set<UUID> = []
 	
 	@State private var selectionFeedbackTrigger: Int = 0
-	@State private var successFeedbackTrigger: Int = 0
 	@State private var deleteConfirmationPresented: Bool = false
 	@State private var infoSheetPresented: Bool = false
 	
@@ -51,7 +50,7 @@ struct GPAView: View {
 					if !courses.isEmpty {
 						let result = gpa
 						
-						GPAContent(courses: $courses,editMode: $editMode, selectionFeedbackTrigger: $selectionFeedbackTrigger, successFeedbackTrigger: $successFeedbackTrigger, focused: $focused, unweightedGPA: result.unweighted, weightedGPA: result.weighted)
+						GPAContent(courses: $courses,editMode: $editMode, selectionFeedbackTrigger: $selectionFeedbackTrigger, focused: $focused, unweightedGPA: result.unweighted, weightedGPA: result.weighted)
 					}
 				}
 				.onAppear {
@@ -269,7 +268,6 @@ struct GPAView: View {
 						.presentationRimLight(.visible)
 				}
 				.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
-				.sensoryFeedback(.success, trigger: successFeedbackTrigger)
 				.toolbarVisibility(!editMode.isEditing ? .visible : .hidden, for: .tabBar)
 				.toolbarVisibility(!editMode.isEditing ? .hidden : .visible, for: .bottomBar)
 				.toolbarTitleDisplayMode(.inline)

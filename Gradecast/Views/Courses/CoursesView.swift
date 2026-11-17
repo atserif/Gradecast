@@ -27,7 +27,6 @@ struct CoursesView: View {
 	]
 	
 	@State private var selectionFeedbackTrigger: Int = 0
-	@State private var successFeedbackTrigger: Int = 0
 	@State private var infoSheetPresented: Bool = false
 	
 	private var courseGrade: Grade {
@@ -114,7 +113,7 @@ struct CoursesView: View {
 					.contextMenu {
 						Button("Copy Course Grade", systemImage: "document.on.document") {
 							UIPasteboard.general.string = courseGrade.description
-							successFeedbackTrigger += 1
+							selectionFeedbackTrigger += 1
 						}
 					}
 				}
@@ -153,7 +152,6 @@ struct CoursesView: View {
 					.presentationRimLight(.visible)
 			}
 			.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
-			.sensoryFeedback(.success, trigger: successFeedbackTrigger)
 			// Accounts for the 2 2/3 pt gap between the vertical bounds of the segmented Picker and List row
 			.contentMargins(.top, 7 + (1 / 3))
 			.toolbarTitleDisplayMode(.inline)
