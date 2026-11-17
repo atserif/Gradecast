@@ -229,14 +229,12 @@ struct GPAView: View {
 								.opacity(0)
 							
 							Text("\(selection.count) Selected")
-								.bold()
 								.monospacedDigit()
 								.contentTransition(.numericText(value: Double(-selection.count)))
 						}
 						.padding(.horizontal, 12)
 						.fixedSize(horizontal: true, vertical: false)
 					}
-					.sharedBackgroundVisibility(.hidden)
 					
 					ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
 					
