@@ -68,6 +68,7 @@ struct CoursesView: View {
 					}
 					.pickerStyle(.segmented)
 					.controlSize(horizontalSizeClass == .compact ? .extraLarge : .regular)
+					.focusedSceneValue(\.courseCalculator, $calculatorSelection)
 					.sensoryFeedback(.selection, trigger: calculatorSelection)
 				}
 				// 1 pt bottom inset accounts for the segmented Picker's arbitrary vertical offset

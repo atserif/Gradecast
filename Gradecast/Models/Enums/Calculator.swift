@@ -5,6 +5,8 @@
 //  Created by Aram Soneson on 11/4/26.
 //
 
+import SwiftUI
+
 enum Calculator: CaseIterable, Codable {
 	case fullYear
 	case semester
@@ -15,6 +17,14 @@ enum Calculator: CaseIterable, Codable {
 		case .fullYear: "Full Year"
 		case .semester: "Semester"
 		case .stateAssessed: "State-Assessed"
+		}
+	}
+	
+	var keyboardShortcut: KeyEquivalent {
+		switch self {
+		case .fullYear: "1"
+		case .semester: "2"
+		case .stateAssessed: "3"
 		}
 	}
 	

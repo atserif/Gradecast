@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-private enum TabSelection {
-	case courses
-	case gpa
-}
-
 struct ContentView: View {
 	@State private var tabSelection: TabSelection = .courses
 	
@@ -25,6 +20,7 @@ struct ContentView: View {
 				GPAView()
 			}
 		}
+		.focusedSceneValue(\.selectedTab, $tabSelection)
 		.sensoryFeedback(.selection, trigger: tabSelection)
 	}
 }
