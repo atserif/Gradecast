@@ -222,60 +222,60 @@ struct GPAView: View {
 								selectionFeedbackTrigger += 1
 							}
 						}
-					}
-					
-					ToolbarItem(placement: .bottomBar) {
-						Button("Reset", systemImage: "arrow.counterclockwise") {
-							for index in courses.indices where selection.contains(courses[index].id) {
-								courses[index].reset()
-							}
-							
-							selectionFeedbackTrigger += 1
-						}
-						.disabled(selection.isEmpty)
-					}
-					
-					ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
-					
-					ToolbarItem(placement: .bottomBar) {
-						ZStack {
-							Text("00 selected")
-								.bold()
-								.monospacedDigit()
-								.opacity(0)
-							
-							Text("\(selection.count) Selected")
-								.bold()
-								.monospacedDigit()
-								.contentTransition(.numericText(value: Double(-selection.count)))
-						}
-						.padding(.horizontal, 12)
-						.fixedSize(horizontal: true, vertical: false)
-					}
-					.sharedBackgroundVisibility(.hidden)
-					
-					ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
-					
-					ToolbarItem(placement: .bottomBar) {
-						Button("Delete", systemImage: "trash", role: .destructive) {
-							temporarySelection = selection
-							deleteConfirmationPresented = true
-							
-							selectionFeedbackTrigger += 1
-						}
-						.alert("Delete \(temporarySelection.count == 1 ? "Course" : "Courses")", isPresented: $deleteConfirmationPresented) {
-							Button("Delete", role: .destructive) {
-								withAnimation {
-									courses.removeAll { temporarySelection.contains($0.id) }
+						
+						ToolbarItem(placement: .bottomBar) {
+							Button("Reset", systemImage: "arrow.counterclockwise") {
+								for index in courses.indices where selection.contains(courses[index].id) {
+									courses[index].reset()
 								}
 								
-								editMode = .inactive
 								selectionFeedbackTrigger += 1
 							}
-						} message: {
-							Text("Are you sure you want to delete \(temporarySelection.count == 1 ? "this course?" : "these courses?")")
+							.disabled(selection.isEmpty)
 						}
-						.disabled(selection.isEmpty)
+						
+						ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
+						
+						ToolbarItem(placement: .bottomBar) {
+							ZStack {
+								Text("00 selected")
+									.bold()
+									.monospacedDigit()
+									.opacity(0)
+								
+								Text("\(selection.count) Selected")
+									.bold()
+									.monospacedDigit()
+									.contentTransition(.numericText(value: Double(-selection.count)))
+							}
+							.padding(.horizontal, 12)
+							.fixedSize(horizontal: true, vertical: false)
+						}
+						.sharedBackgroundVisibility(.hidden)
+						
+						ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
+						
+						ToolbarItem(placement: .bottomBar) {
+							Button("Delete", systemImage: "trash", role: .destructive) {
+								temporarySelection = selection
+								deleteConfirmationPresented = true
+								
+								selectionFeedbackTrigger += 1
+							}
+							.alert("Delete \(temporarySelection.count == 1 ? "Course" : "Courses")", isPresented: $deleteConfirmationPresented) {
+								Button("Delete", role: .destructive) {
+									withAnimation {
+										courses.removeAll { temporarySelection.contains($0.id) }
+									}
+									
+									editMode = .inactive
+									selectionFeedbackTrigger += 1
+								}
+							} message: {
+								Text("Are you sure you want to delete \(temporarySelection.count == 1 ? "this course?" : "these courses?")")
+							}
+							.disabled(selection.isEmpty)
+						}
 					}
 				}
 				.sheet(isPresented: $infoSheetPresented) {
@@ -285,7 +285,6 @@ struct GPAView: View {
 				}
 				.sensoryFeedback(.selection, trigger: selectionFeedbackTrigger)
 				.toolbarVisibility(!editMode.isEditing ? .visible : .hidden, for: .tabBar)
-				.toolbarVisibility(!editMode.isEditing ? .hidden : .visible, for: .bottomBar)
 				.toolbarTitleDisplayMode(.inline)
 				.toolbarRole(.editor)
 				.scrollEdgeEffectStyle(.soft, for: .all)
