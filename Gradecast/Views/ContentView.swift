@@ -20,7 +20,7 @@ struct ContentView: View {
 				GPAView()
 			}
 		}
-		.focusedSceneValue(\.selectedTab, $tabSelection)
+		.focusedSceneValue(\.selectedTab, tabSelection)
 		.sensoryFeedback(.selection, trigger: tabSelection)
 	}
 }

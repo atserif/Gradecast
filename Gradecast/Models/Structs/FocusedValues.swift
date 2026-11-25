@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectedTabKey: FocusedValueKey {
-	typealias Value = Binding<TabSelection>
+	typealias Value = TabSelection
 }
 
 struct CourseCalculatorKey: FocusedValueKey {
@@ -20,7 +20,7 @@ struct CourseCountKey: FocusedValueKey {
 }
 
 extension FocusedValues {
-	var selectedTab: Binding<TabSelection>? {
+	var selectedTab: TabSelection? {
 		get { self[SelectedTabKey.self] }
 		set { self[SelectedTabKey.self] = newValue }
 	}

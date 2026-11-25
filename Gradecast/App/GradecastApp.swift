@@ -13,7 +13,7 @@ extension Notification.Name {
 
 @main
 struct GradecastApp: App {
-	@FocusedBinding(\.selectedTab) private var selectedTab
+	@FocusedValue(\.selectedTab) private var selectedTab
 	@FocusedBinding(\.courseCalculator) private var courseCalculator
 	@FocusedValue(\.courseCount) private var courseCount
 	
