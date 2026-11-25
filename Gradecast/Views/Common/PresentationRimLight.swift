@@ -28,6 +28,7 @@ struct PresentationRimLight: ViewModifier {
 							}
 						}
 						.ignoresSafeArea()
+						.accessibilityHidden(true)
 				}
 			}
 	}

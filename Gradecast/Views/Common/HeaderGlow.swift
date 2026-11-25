@@ -32,6 +32,7 @@ struct HeaderGlow: ViewModifier {
 							.ignoresSafeArea()
 							.animation(.default, value: glowOpacity)
 							.animation(.default, value: isFocused)
+							.accessibilityHidden(true)
 					}
 				}
 				.onScrollGeometryChange(for: Bool.self) { scrollGeometry in

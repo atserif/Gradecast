@@ -29,6 +29,7 @@ struct PickerLabelStyle: LabelStyle {
 			if showBorders {
 				Capsule()
 					.fill(Color(.tertiarySystemFill))
+					.accessibilityHidden(true)
 			}
 		}
 	}
