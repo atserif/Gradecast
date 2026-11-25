@@ -238,17 +238,15 @@ struct GPAView: View {
 						
 						ToolbarItem(placement: .bottomBar) {
 							ZStack {
-								Text("00 selected")
+								Text("Select Courses")
 									.bold()
-									.monospacedDigit()
 									.opacity(0)
 								
-								Text("\(selection.count) Selected")
+								Text(selection.count == 0 ? "Select Courses" : "\(selection.count) Selected")
 									.bold()
 									.monospacedDigit()
 									.contentTransition(.numericText(value: Double(-selection.count)))
 							}
-							.padding(.horizontal, 12)
 							.fixedSize(horizontal: true, vertical: false)
 						}
 						.sharedBackgroundVisibility(.hidden)
