@@ -157,6 +157,21 @@ struct GPAView: View {
 								
 								selectionFeedbackTrigger += 1
 							}
+							// Passes the number of courses to the menu bar command declaration so it can be dynamically disabled
+							.focusedSceneValue(\.courseCount, courses.count)
+							// Performs the same action when triggered from the menu bar
+							.onReceive(NotificationCenter.default.publisher(for: .newCourseTrigger)) { _ in
+								focused = nil
+								
+								Task {
+									withAnimation {
+										newCourse()
+										proxy.scrollTo("bottom", anchor: .top)
+									}
+								}
+								
+								selectionFeedbackTrigger += 1
+							}
 							.disabled(courses.count >= 20)
 							
 							Menu("More", systemImage: "ellipsis") {

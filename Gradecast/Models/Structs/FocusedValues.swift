@@ -15,6 +15,10 @@ struct CourseCalculatorKey: FocusedValueKey {
 	typealias Value = Binding<Calculator>
 }
 
+struct CourseCountKey: FocusedValueKey {
+	typealias Value = Int
+}
+
 extension FocusedValues {
 	var selectedTab: Binding<TabSelection>? {
 		get { self[SelectedTabKey.self] }
@@ -24,5 +28,10 @@ extension FocusedValues {
 	var courseCalculator: Binding<Calculator>? {
 		get { self[CourseCalculatorKey.self] }
 		set { self[CourseCalculatorKey.self] = newValue }
+	}
+	
+	var courseCount: Int? {
+		get { self[CourseCountKey.self] }
+		set { self[CourseCountKey.self] = newValue }
 	}
 }
