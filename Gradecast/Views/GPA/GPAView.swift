@@ -216,6 +216,8 @@ struct GPAView: View {
 							}
 						}
 						
+						ToolbarSpacer(.fixed, placement: .topBarTrailing)
+						
 						ToolbarItem(placement: .confirmationAction) {
 							Button("Confirm", systemImage: "checkmark", role: .confirm) {
 								editMode = .inactive
@@ -223,7 +225,7 @@ struct GPAView: View {
 							}
 						}
 						
-						ToolbarItem(placement: .bottomBar) {
+						ToolbarItem(placement: horizontalSizeClass == .compact ? .bottomBar : .topBarTrailing) {
 							Button("Reset", systemImage: "arrow.counterclockwise") {
 								for index in courses.indices where selection.contains(courses[index].id) {
 									courses[index].reset()
@@ -234,9 +236,9 @@ struct GPAView: View {
 							.disabled(selection.isEmpty)
 						}
 						
-						ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
+						ToolbarSpacer(.flexible, placement: .bottomBar)
 						
-						ToolbarItem(placement: .bottomBar) {
+						ToolbarItem(placement: horizontalSizeClass == .compact ? .bottomBar : .title) {
 							ZStack {
 								Text("Select Courses")
 									.bold()
@@ -251,9 +253,9 @@ struct GPAView: View {
 						}
 						.sharedBackgroundVisibility(.hidden)
 						
-						ToolbarSpacer(horizontalSizeClass == .compact ? .flexible : .fixed, placement: .bottomBar)
+						ToolbarSpacer(.flexible, placement: .bottomBar)
 						
-						ToolbarItem(placement: .bottomBar) {
+						ToolbarItem(placement: horizontalSizeClass == .compact ? .bottomBar : .topBarTrailing) {
 							Button("Delete", systemImage: "trash", role: .destructive) {
 								temporarySelection = selection
 								deleteConfirmationPresented = true
