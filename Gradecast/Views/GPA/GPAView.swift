@@ -244,7 +244,7 @@ struct GPAView: View {
 									.bold()
 									.opacity(0)
 								
-								Text(selection.count == 0 ? "Select Courses" : "\(selection.count) Selected")
+								Text(selection.isEmpty ? "Select Courses" : "\(selection.count) Selected")
 									.bold()
 									.monospacedDigit()
 									.contentTransition(.numericText(value: Double(-selection.count)))
